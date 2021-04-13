@@ -1,4 +1,4 @@
-# Spring Boot 2 + Angular 10: User Registration and Login using JWT Authentication, OAuth2 Social Login with Facebook, Google, LinkedIn, and Github using Spring Security 5 and Two Factor Authentication (2FA)
+# Deploy Angular, Spring Boot, and MySQL Application to DigitalOcean Kubernetes in 30 mins
 
 [Creating Backend - Spring REST API - Part 1](https://www.javachinna.com/spring-boot-angular-two-factor-authentication/)
 
@@ -10,4 +10,4 @@
 
 [Dockerize Angular with NGINX and Spring Boot with MySQL using Docker Compose](https://www.javachinna.com/angular-nginx-spring-boot-mysql-docker-compose/)
 
-[Deploy Angular, Spring Boot, and MySQL Application to DigitalOcean Kubernetes in 30 mins Compose](https://www.javachinna.com/deploy-angular-spring-boot-mysql-digitalocean-kubernetes/)
+[Deploy Angular, Spring Boot, and MySQL Application to DigitalOcean Kubernetes in 30 mins](https://www.javachinna.com/deploy-angular-spring-boot-mysql-digitalocean-kubernetes/)
