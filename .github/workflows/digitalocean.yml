@@ -41,7 +41,7 @@ jobs:
         context: ./angular-11-social-login
         file: ./angular-11-social-login/Dockerfile
         push: true
-        tags:  "$DOCKER_HUB_USERNAME/$ANGULAR_IMAGE_NAME:$GITHUB_SHA"
+        tags:  "$DOCKER_HUB_USERNAME"/"$ANGULAR_IMAGE_NAME":"$GITHUB_SHA"
 
     - name: Build and push Spring Boot Image
       id: spring-boot-docker_build
@@ -50,7 +50,7 @@ jobs:
         context: ./spring-boot-oauth2-social-login
         file: ./spring-boot-oauth2-social-login/Dockerfile
         push: true
-        tags:  "$DOCKER_HUB_USERNAME/$SPRING_BOOT_IMAGE_NAME:$GITHUB_SHA"
+        tags:  $DOCKER_HUB_USERNAME/$SPRING_BOOT_IMAGE_NAME:$GITHUB_SHA
 
     - name: Install doctl
       uses: digitalocean/action-doctl@v2
