@@ -7,8 +7,6 @@ on:
       - main
 # Environment variables available to all jobs and steps in this workflow
 env:
-  GITHUB_SHA: ${{ github.sha }}
-  DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
   ANGULAR_IMAGE_NAME: social-login-app-client
   ANGULAR_CONTAINER_NAME: social-login-app-client
   ANGULAR_DEPLOYMENT_NAME: social-login-app-client
@@ -45,7 +43,7 @@ jobs:
         context: ./angular-11-social-login
         file: ./angular-11-social-login/Dockerfile
         push: true
-        tags:  ${{ env.DOCKER_HUB_USERNAME }}/${{ env.ANGULAR_IMAGE_NAME }}:${{ env.GITHUB_SHA }}
+        tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.ANGULAR_IMAGE_NAME }}:${{ github.sha }}
 
     - name: Build and push Spring Boot Image
       id: spring-boot-docker_build
@@ -54,12 +52,12 @@ jobs:
         context: ./spring-boot-oauth2-social-login
         file: ./spring-boot-oauth2-social-login/Dockerfile
         push: true
-        tags:  $env:DOCKER_HUB_USERNAME/$env:SPRING_BOOT_IMAGE_NAME:$env:GITHUB_SHA
+        tags:  ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.SPRING_BOOT_IMAGE_NAME }}:${{ github.sha }}
 
     - name: Install doctl
       uses: digitalocean/action-doctl@v2
       with:
-        token: $env:{{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
     - name: Save DigitalOcean kubeconfig with short-lived credentials
       run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 k8s-1-20-2-do-0-blr1-1619022201280
@@ -67,8 +65,8 @@ jobs:
     # Deploy the Angular Docker image to the DigitalOcean kubernetes cluster
     - name: Deploy
       run: |-
-        kubectl set image deployment/$env:ANGULAR_DEPLOYMENT_NAME $env:ANGULAR_CONTAINER_NAME=$env:DOCKER_HUB_USERNAME/$env:ANGULAR_IMAGE_NAME:$env:GITHUB_SHA
-        kubectl set image deployment/$env:SPRING_BOOT_DEPLOYMENT_NAME $env:SPRING_BOOT_CONTAINER_NAME=$env:DOCKER_HUB_USERNAME/$env:SPRING_BOOT_IMAGE_NAME:$env:GITHUB_SHA
-        kubectl rollout status deployment/$env:ANGULAR_DEPLOYMENT_NAME
-        kubectl rollout status deployment/$env:SPRING_BOOT_DEPLOYMENT_NAME
+        kubectl set image deployment/{{env.ANGULAR_DEPLOYMENT_NAME}} {{env.ANGULAR_CONTAINER_NAME}}=${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.ANGULAR_IMAGE_NAME }}:${{ github.sha }}
+        kubectl set image deployment/{{env.SPRING_BOOT_DEPLOYMENT_NAME}} ${{ env.SPRING_BOOT_CONTAINER_NAME}}=${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.SPRING_BOOT_IMAGE_NAME }}:${{ github.sha }}
+        kubectl rollout status deployment/{{env.ANGULAR_DEPLOYMENT_NAME}}
+        kubectl rollout status deployment/{{env.SPRING_BOOT_DEPLOYMENT_NAME}}
         kubectl get services -o wide
