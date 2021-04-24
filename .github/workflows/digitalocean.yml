@@ -21,6 +21,9 @@ jobs:
         username: ${{ secrets.DOCKER_HUB_USERNAME }}
         password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
+    - name: Provide permission to run mvnw
+      run: chmod +x ./spring-boot-oauth2-social-login/mvnw
+
     - name: Build and push
       id: docker_build
       uses: docker/build-push-action@v2
