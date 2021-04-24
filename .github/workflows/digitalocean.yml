@@ -41,7 +41,7 @@ jobs:
         context: ./angular-11-social-login
         file: ./angular-11-social-login/Dockerfile
         push: true
-        tags:  "$DOCKER_HUB_USERNAME"/"$ANGULAR_IMAGE_NAME":"$GITHUB_SHA"
+        tags:  $DOCKER_HUB_USERNAME/$ANGULAR_IMAGE_NAME:$GITHUB_SHA
 
     - name: Build and push Spring Boot Image
       id: spring-boot-docker_build
