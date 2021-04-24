@@ -22,7 +22,7 @@ public class UserController {
 
 	@GetMapping("/all")
 	public ResponseEntity<?> getContent() {
-		return ResponseEntity.ok("Public content goes here");
+		return ResponseEntity.ok("Modified Public content goes here");
 	}
 
 	@GetMapping("/user")
