@@ -22,6 +22,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+    # OS specific syntax should be used to access the environment variables. Specify the shell as bash to use same syntax across multiple OSes
+    - name: Specify the shell as bash
+      run: chsh -s /bin/bash
+
     - name: Checkout main
       uses: actions/checkout@main
 
