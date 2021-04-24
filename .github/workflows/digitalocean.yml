@@ -24,14 +24,23 @@ jobs:
     - name: Provide permission to run mvnw
       run: chmod +x ./spring-boot-oauth2-social-login/mvnw
 
-    - name: Build and push
+    - name: Build and push Angular Image
+      id: docker_build
+      uses: docker/build-push-action@v2
+      with:
+        context: ./angular-11-social-login
+        file: ./angular-11-social-login/Dockerfile
+        push: true
+        tags:  "${{ secrets.DOCKER_HUB_USERNAME }}/social-login-app-client:${{ github.sha }}"
+
+    - name: Build and push Spring Boot Image
       id: docker_build
       uses: docker/build-push-action@v2
       with:
         context: ./spring-boot-oauth2-social-login
         file: ./spring-boot-oauth2-social-login/Dockerfile
         push: true
-        tags:  "${{ secrets.DOCKER_HUB_USERNAME }}/social-login-app-client:${{ github.sha }}"
+        tags:  "${{ secrets.DOCKER_HUB_USERNAME }}/social-login-app-server:${{ github.sha }}"
 
     - name: Install doctl
       uses: digitalocean/action-doctl@v2
@@ -39,7 +48,7 @@ jobs:
         token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
     - name: Save DigitalOcean kubeconfig with short-lived credentials
-      run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 actions-example-k8s-1-18
+      run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 k8s-1-20-2-do-0-blr1-1619022201280
 
     # Set up kustomize
     - name: Set up Kustomize
@@ -47,10 +56,18 @@ jobs:
         curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
         chmod u+x ./kustomize
 
-    # Deploy the Docker image to the GKE cluster
+    # Deploy the Angular Docker image to the DigitalOcean cluster
     - name: Deploy
       run: |-
         ./kustomize edit set image javachinna/social-login-app-client:${{ github.sha }}
+        ./kustomize build . | kubectl apply -f -
+        kubectl rollout status deployment/$DEPLOYMENT_NAME
+        kubectl get services -o wide
+
+    # Deploy the Spring Boot Docker image to the DigitalOcean cluster
+    - name: Deploy
+      run: |-
+        ./kustomize edit set image javachinna/social-login-app-server:${{ github.sha }}
         ./kustomize build . | kubectl apply -f -
         kubectl rollout status deployment/$DEPLOYMENT_NAME
         kubectl get services -o wide
