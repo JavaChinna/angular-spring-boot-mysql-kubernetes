@@ -58,7 +58,7 @@ jobs:
     - name: Save DigitalOcean kubeconfig with short-lived credentials
       run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 k8s-1-20-2-do-0-blr1-1619022201280
 
-    # Deploy the Angular Docker image to the DigitalOcean kubernetes cluster
+    # Deploy Angular & Spring Boot Docker image to the DigitalOcean kubernetes cluster
     - name: Deploy
       run: |-
         kubectl set image deployment/${{env.ANGULAR_DEPLOYMENT_NAME}} ${{env.ANGULAR_CONTAINER_NAME}}=${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.ANGULAR_IMAGE_NAME }}:${{ github.sha }}
