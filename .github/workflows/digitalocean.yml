@@ -15,9 +15,6 @@ jobs:
     - name: Checkout main
       uses: actions/checkout@main
 
-    - name: Update SHA
-      run: echo $GITHUB_SHA > $GITHUB_WORKSPACE/site/_meta
-
     - name: Login to Docker Hub
       uses: docker/login-action@v1
       with:
