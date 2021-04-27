@@ -11,3 +11,6 @@
 [Dockerize Angular with NGINX and Spring Boot with MySQL using Docker Compose](https://www.javachinna.com/angular-nginx-spring-boot-mysql-docker-compose/)
 
 [Deploy Angular, Spring Boot, and MySQL Application to DigitalOcean Kubernetes in 30 mins](https://www.javachinna.com/deploy-angular-spring-boot-mysql-digitalocean-kubernetes/)
+
+[Create CI/CD pipeline using GitHub Actions to Build and Deploy Angular Spring Boot App on Kubernetes in 15 mins
+](https://www.javachinna.com/spring-boot-angular-ci-cd-pipeline-github-actions-kubernetes/)
