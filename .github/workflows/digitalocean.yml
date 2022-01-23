@@ -50,19 +50,4 @@ jobs:
         push: true
         tags:  ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.SPRING_BOOT_IMAGE_NAME }}:${{ github.sha }}
 
-    - name: Install doctl
-      uses: digitalocean/action-doctl@v2
-      with:
-        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-
-    - name: Save DigitalOcean kubeconfig with short-lived credentials
-      run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 k8s-1-20-2-do-0-blr1-1619022201280
-
-    # Deploy Angular & Spring Boot Docker image to the DigitalOcean kubernetes cluster
-    - name: Deploy
-      run: |-
-        kubectl set image deployment/${{env.ANGULAR_DEPLOYMENT_NAME}} ${{env.ANGULAR_CONTAINER_NAME}}=${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.ANGULAR_IMAGE_NAME }}:${{ github.sha }}
-        kubectl set image deployment/${{env.SPRING_BOOT_DEPLOYMENT_NAME}} ${{ env.SPRING_BOOT_CONTAINER_NAME}}=${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.SPRING_BOOT_IMAGE_NAME }}:${{ github.sha }}
-        kubectl rollout status deployment/${{env.ANGULAR_DEPLOYMENT_NAME}}
-        kubectl rollout status deployment/${{env.SPRING_BOOT_DEPLOYMENT_NAME}}
-        kubectl get services -o wide
+    
